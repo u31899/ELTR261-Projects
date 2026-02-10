@@ -1,0 +1,112 @@
+(*IF nothing THEN
+nothing;
+END_IF;
+
+- Counts how many inputs are ON 
+- Activates outputs based on counts
+- Adds a priority override 
+	- If Input4 is ON then only Output 4 turns ON
+- Use a timer condition before activating the final output
+If all 4 inputs are on, out4 turns on only after 3 seconds
+
+
+*)
+(*Timer.PRE := 3000;
+
+
+
+
+count:=BOOL_TO_INT(Input1)+BOOL_TO_INT(Input2)+BOOL_TO_INT(Input3)+BOOL_TO_INT(Input4);
+timerStart:= FALSE;
+IF (Input4= 1) THEN
+	Output1:=0;
+	Output2:=0;
+	Output3:=0;
+	Output4:=1;
+
+ELSIF (count=0) THEN
+	Output1:=0;
+	Output2:=0;
+	Output3:=0;
+	Output4:=0;
+ELSIF (count=1) THEN
+	Output1:=1;
+	Output2:=0;
+	Output3:=0;
+	Output4:=0;
+ELSIF (count=2) THEN
+	Output1:=0;
+	Output2:=1;
+	Output3:=0;
+	Output4:=0;
+ELSIF (count=3) THEN
+	Output1:=0;
+	Output2:=0;
+	Output3:=1;
+	Output4:=0;
+ELSE
+	Output1:=0;
+	Output2:=0;
+	Output3:=0;
+	Output4:=0;
+	timerStart:= TRUE;
+
+	T1(IN:=timerStart, PT := T#3s);
+	IF T1.Q THEN
+		Output4:=1;
+	ELSE
+		Output4:=0;
+END_IF;
+END_IF;
+
+*)
+
+count := BOOL_TO_INT(Input1) + BOOL_TO_INT(Input2) + BOOL_TO_INT(Input3) + BOOL_TO_INT(Input4);
+
+IF (Input4 AND count = 1) THEN
+    Input4WasFirst := TRUE;
+END_IF;
+
+IF (count = 0) THEN
+    Input4WasFirst := FALSE;
+END_IF;
+
+timerStart := (count = 4);
+
+T1(IN := timerStart, PT := T#3s);
+
+IF (Input4WasFirst) THEN
+    Output1 := 0;
+    Output2 := 0;
+    Output3 := 0;
+    Output4 := 1;
+ELSIF (count = 0) THEN
+    Output1 := 0;
+    Output2 := 0;
+    Output3 := 0;
+    Output4 := 0;
+ELSIF (count = 1) THEN
+    Output1 := 1;
+    Output2 := 0;
+    Output3 := 0;
+    Output4 := 0;
+ELSIF (count = 2) THEN
+    Output1 := 0;
+    Output2 := 1;
+    Output3 := 0;
+    Output4 := 0;
+ELSIF (count = 3) THEN
+    Output1 := 0;
+    Output2 := 0;
+    Output3 := 1;
+    Output4 := 0;
+ELSE
+    Output1 := 0;
+    Output2 := 0;
+    Output3 := 0;
+    IF T1.Q THEN
+        Output4 := 1;
+    ELSE
+        Output4 := 0;
+    END_IF;
+END_IF;
